@@ -1,0 +1,12 @@
+{application, udp_broker,
+ [
+  {description, "UDP message broker"},
+  {vsn, "1.0"},
+  {registered, [udp_broker]},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { udp_broker_app, []}},
+  {env, []}
+ ]}.
