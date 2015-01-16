@@ -13,7 +13,8 @@ start(Host, Port, Parallel, Count, Delay, Message) ->
     io:format("parallel run ~B process to send udp packet to ~s:~B~n Count: ~B, Dealy: ~B~n",[Parallel,Host,Port,Count,Delay]),
     PidList = async_run(fun() -> send(Host, Port, Count, Delay, Message) end, Parallel),
     wait_proccesses(PidList),
-    io:format("parallel process Done !~n",[]).
+    io:format("parallel process Done !~n",[]),
+    ok.
 
 %% --  a timer, execute <Fun> after <Time> million seconds -- %%
 timer(Time,Fun) ->
