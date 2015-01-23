@@ -35,7 +35,7 @@ send_repeat(Socket, Host, Port, Repeat, Message, Delay) ->
     if 
 	Repeat == 1 ->
 	    ok = gen_udp:send(Socket, Host, Port, Message),
-	    io:format("~p send packet ~B~n", [Repeat]);
+	    io:format("send packet ~B~n", [Repeat]);
 	Repeat > 1 ->
 	    timer(Delay, fun() -> send_repeat(Socket, Host, Port, Repeat - 1, Message, Delay) end);
 	true ->
