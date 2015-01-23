@@ -30,6 +30,7 @@ timer(Time,Fun) ->
 send(Host, Port, Count, Delay, Message) ->
     {ok, Socket} = gen_udp:open(0, [binary]),
     send_repeat(Socket, Host, Port, Count, Message, Delay).
+
 send_repeat(_, _, _, 0, _, _) -> ok;
 send_repeat(Socket, Host, Port, Repeat, Message, Delay) ->
     ok = gen_udp:send(Socket, Host, Port, Message),
