@@ -29,18 +29,16 @@ timer(Time,Fun) ->
 %% -- send <Message> to <Host:Port> repeat <Count> times with <Delay> interval -- %%
 send(Host, Port, Count, Delay, Message) ->
     {ok, Socket} = gen_udp:open(0, [binary]),
-    send_repeat(Socket, Host, Port, Count, Message, Delay).
+    send_repeat(Socket, Host, Port, Count, Message, Delay, 0).
 
-send_repeat(_, _, _, 0, _, _) -> ok;
-send_repeat(Socket, Host, Port, Repeat, Message, Delay) ->
+send_repeat(Socket, _, _, COUNT, _, _, COUNT) ->
+    gen_udp:close(Socket),
+    ok;
+send_repeat(Socket, Host, Port, Count, Message, Delay, Index) ->
     ok = gen_udp:send(Socket, Host, Port, Message),
-    io:format("send packet ~B~n", [Repeat]),
-    if
-	Repeat > 1 ->
-	    timer(Delay, fun() -> send_repeat(Socket, Host, Port, Repeat - 1, Message, Delay) end);
-	true ->
-	    gen_udp:close(Socket)
-    end.    
+    io:format("~p send packet ~B~n", [self(), Index]),
+    timer(Delay,  fun() -> send_repeat(Socket, Host, Port, Count, Message, Delay, Index + 1) end).
+
 %% --- remove first element occurred in list --- %%
 list_remove_first([], _) -> [];
 list_remove_first([I|L], E) when I /= E -> [I|list_remove_first(L,E)];
