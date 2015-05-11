@@ -17,13 +17,13 @@ start(Host, Port, Parallel, Count, Delay, Message) ->
     ok.
 
 %% --  a timer, execute <Fun> after <Time> million seconds -- %%
-timer(Time,Fun) ->
-    receive 
-	cancel ->
-	    void
-    after Time ->
-	    Fun()
-    end.
+%% timer(Time,Fun) ->
+%%     receive 
+%% 	cancel ->
+%% 	    void
+%%     after Time ->
+%% 	    Fun()
+%%     end.
 
 
 %% -- send <Message> to <Host:Port> repeat <Count> times with <Delay> interval -- %%
@@ -38,7 +38,8 @@ send_repeat(Socket, Host, Port, Count, MessageFun, Delay, Index) ->
     Message = MessageFun(Index),
     ok = gen_udp:send(Socket, Host, Port, Message),
     io:format("~p send packet ~B~n", [self(), Index]),
-    timer(Delay,  fun() -> send_repeat(Socket, Host, Port, Count, MessageFun, Delay, Index + 1) end).
+    timer:sleep(Delay),
+    send_repeat(Socket, Host, Port, Count, MessageFun, Delay, Index + 1).
 
 %% --- remove first element occurred in list --- %%
 list_remove_first([], _) -> [];
